@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#define N 100 
+double* full_elements(double *ptr_array, int n);
+int put_elements(double *ptr_array, int n);
+double* calc_elements(double *ptr_array, int n);
+double sum_elements(double *ptr_array, int begin, int end);
+int find_element(double *ptr_array, int n, double element);
+
+int main() {
+    double array[N];
+    int size;
+    printf("Введите размер массива (от 1 до %d) > ", N);
+    if (scanf("%d", &size) != 1 || size <= 0 || size > N) {
+        printf("Ошибка: введите корректное число от 1 до %d.\n", N);
+        return 1;
+    }
+
+    full_elements(array, size);
+    printf("\nИсходный массив (y = x^2 + sin(5x)):\n");
+    put_elements(array, size);
+
+    calc_elements(array, size);
+    printf("\nМассив после удвоения:\n");
+    put_elements(array, size);
+    int begin, end;
+    printf("\n--- Вычисление суммы элементов ---\n");
+    printf("Введите начальный и конечный индексы (от 0 до %d) через пробел > ", size - 1);
+    
+    if (scanf("%d %d", &begin, &end) == 2 && begin >= 0 && end < size && begin <= end) {
+        double total_sum = sum_elements(array, begin, end);
+        printf("Сумма элементов с индекса %d по %d включительно = %.4lf\n", begin, end, total_sum);
+    } else {
+        printf("Ошибка: указаны некорректные границы индексов.\n");
+    }
+    double target;
+    printf("\n--- Поиск элемента ---\n");
+    printf("Введите искомое значение элемента a > ");
+    
+    if (scanf("%lf", &target) == 1) {
+        int found_index = find_element(array, size, target);
+        if (found_index != -1) {
+            printf("Элемент найден! Его индекс: %d\n", found_index);
+        } else {
+            printf("Элемент %.4lf не найден в массиве (код возврата: -1).\n", target);
+        }
+    }
+    return 0;
+}
+double* full_elements(double *ptr_array, int n) {
+    double x = 0.0;
+    double step = 0.2;
+
+    for (int i = 0; i < n; i++) {
+        *(ptr_array + i) = (x * x) + sin(5.0 * x);
+        x += step;
+    }
+    return ptr_array;
+}
+int put_elements(double *ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("array[%d] = %.4lf\n", i, *(ptr_array + i));
+    }
+    return n;
+}
+double* calc_elements(double *ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+        *(ptr_array + i) *= 2.0;
+    }
+    return ptr_array;
+}
+double sum_elements(double *ptr_array, int begin, int end) {
+    double sum = 0.0;
+    for (int i = begin; i <= end; i++) {
+        sum += *(ptr_array + i);
+    }
+    return sum;
+}
+int find_element(double *ptr_array, int n, double element) {
+    double eps = 0.0001; 
+
+    for (int i = 0; i < n; i++) {
+        if (fabs(*(ptr_array + i) - element) < eps) {
+            return i;
+        }
+    }
+    return -1; // Элемент не найден
