@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#define N 100 
+double* full_elements(double *ptr_array, int n);
+int put_elements(double *ptr_array, int n);
+double* calc_elements(double *ptr_array, int n);
+
+int main() {
+    double array[N];
+    int size;
+    printf("Введите размер массива (от 1 до %d) > ", N);
+    if (scanf("%d", &size) != 1 || size <= 0 || size > N) {
+        printf("Ошибка: введите корректное число от 1 до %d.\n", N);
+        return 1;
+    }
+    full_elements(array, size);
+    printf("\nИсходный массив (значения y = x^2 + sin(5x)):\n");
+    put_elements(array, size);
+    calc_elements(array, size);
+    printf("\nМассив после обработки (удвоенные значения):\n");
+    put_elements(array, size);
+    return 0;
+}
+double* full_elements(double *ptr_array, int n) {
+    double x = 0.0;     
+    double step = 0.2;  
+    for (int i = 0; i < n; i++) {
+        *(ptr_array + i) = (x * x) + sin(5.0 * x);
+        x += step;
+    }
+    return ptr_array;
+}
+int put_elements(double *ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("array[%d] = %.4lf\n", i, *(ptr_array + i));
+    }
+    return n;
+}
+double* calc_elements(double *ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+        *(ptr_array + i) *= 2.0;
+    }
+    return ptr_array;
+}
